@@ -22,12 +22,12 @@ print(viral_tweets.agg(
     }
 ))
 
-fig, ax = plt.subplots()
-retweet_counts.plot.hist(bins=25, color='tab:cyan')
-plt.axvline(x = median_retweet_count, color = 'red', label = f'median value of retweets in the dataset: {median_retweet_count: .0f}')
-plt.axvline(x = mean_retweet_count, color = 'green', label = f'mean value of retweets in the dataset: {mean_retweet_count: .0f}')
-plt.legend()
-plt.show()
+#fig, ax = plt.subplots()
+#retweet_counts.plot.hist(bins=25, color='tab:cyan')
+#plt.axvline(x = median_retweet_count, color = 'red', label = f'median value of #retweets in the dataset: {median_retweet_count: .0f}')
+#plt.axvline(x = mean_retweet_count, color = 'green', label = f'mean value of #retweets in the dataset: {mean_retweet_count: .0f}')
+#plt.legend()
+#plt.show()
 
 viral_tweets['is_viral'] = viral_tweets['retweet_count'].apply(lambda x: 1 if x > median_retweet_count else 0)
 #print(viral_tweets['is_viral'].value_counts())
@@ -56,10 +56,10 @@ for k in range(1, 200):
     scores.append(classifier.score(test_data, test_labels))
 plt.plot(range(1,200), scores)
 plt.legend(['features: tweet length, # of followers, # of friends'])
-#plt.title('KMeans Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" = Retweets > Median # of Retweets)')
+plt.title('K-Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" = Retweets > Median # of Retweets)')
+#plt.show()
 
 viral_tweets['number_of_hashtags'] = viral_tweets['text'].apply(lambda x: x.count('#'))
-
 hashtag_col_added = ['tweet_length', 'followers_count', 'friends_count', 'number_of_hashtags']
 hashtag_df = viral_tweets[hashtag_col_added]
 scaled_hashtag_df = scale(hashtag_df, axis=0)
@@ -73,8 +73,8 @@ for k in range(1, 200):
     classifier.fit(h_train_data, h_train_labels)
     h_scores.append(classifier.score(h_test_data, h_test_labels))
 plt.plot(range(1, 200), h_scores)
-#plt.legend(['features: tweet length, # of followers, # of friends', 'features: tweet length, # of followers, # of friends, # of hashtags'])
-#plt.title('KMeans Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" Means > Median # of Retweets)')
+plt.legend(['features: tweet length, # of followers, # of friends, # of hashtags'])
+plt.title('K-Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" Means > Median # of Retweets)')
 #plt.show()
 
 fav_col_added = ['tweet_length', 'followers_count', 'friends_count', 'number_of_hashtags', 'favorite_count']
@@ -90,6 +90,9 @@ for k in range(1, 200):
     classifier.fit(f_train_data, f_train_labels)
     fav_scores.append(classifier.score(f_test_data, f_test_labels))
 plt.plot(range(1, 200), fav_scores)
+plt.title('K-Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" Means > Median # of Retweets)')
+plt.legend(['features: tweet_length', 'followers_count', 'friends_count', 'number_of_hashtags', 'favorite_count'])
+#plt.show()
 
 length_friend_favorite = ['tweet_length', 'friends_count', 'favorite_count']
 lff_df = viral_tweets[length_friend_favorite]
@@ -104,6 +107,9 @@ for k in range(1, 200):
     lff_scores.append(classifier.score(lff_test_data, lff_test_labels))
 
 plt.plot(range(1, 200), lff_scores)
-plt.legend(['features: tweet length, # of followers, # of friends', 'features: tweet length, # of followers, # of friends, # of hashtags', 'features: tweet length, # of followers, # of friends, # of hashtags, # of favorites', 'features: tweet_length, friends_count, favorite_count'])
-plt.title('KMeans Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" = Retweets > Median # of Retweets)')
+plt.legend(['features: tweet_length, followers_count, friends_count',
+            'features: tweet_length, friends_count, favorite_count, #_of_hashtags',
+            'features: tweet_length, friends_count, favorite_count, numberof_hashtags, #_of_favorites',
+            'features: tweet_length, friends_count, favorite_count'])
+plt.title('K-Nearest Neighbors Accuracy Scores for Classifying "Viral Tweets" ("Viral" = Retweets > Median # of Retweets)')
 plt.show()
